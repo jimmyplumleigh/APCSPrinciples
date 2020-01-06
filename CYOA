@@ -1,0 +1,107 @@
+def entiregame():
+    def hotwire():
+        userinput7 = input("Do you fight him or run away? ")
+        if userinput7.lower() == "fight":
+            print("Bad choice. You get beat up and wake up in a hospital the next morning")
+            replay()
+        elif userinput7.lower() == "run":
+            print("Smart decision, the police catch him and you get your car back")
+            replay()
+        else:
+            print("Only choose run or fight")
+            hotwire()
+
+    def car():
+        userinput6 = input("Do you take the car and drive home or do you kindly refuse the gift? ")
+        if userinput6.lower() == "take the car":
+            print("You got pulled over by a cop while doing 100 through a neighborhood in Tiger's Ferrari...have fun in jail!")
+            replay()
+        elif userinput6.lower() == "refuse the gift":
+            print("You drive home safely and with a good story to tell")
+            replay()
+        else:
+            print("you can only chose Take the car, or refuse the gift")
+            car()
+
+    def roundjack():
+        userinput5 = input("Do you want to play another round with Jack? ")
+        if userinput5.lower() == "yes":
+            print("You and Jack play again and you beat you last score. Great round!")
+            replay()
+        elif userinput5.lower() == "no":
+            print("After your round you walk out of the parking lot you see a guy trying to hotwire you car")
+            hotwire()
+        else:
+            print("only choose yes or no")
+            roundjack()
+
+    def roundtiger():
+        userinput4 = input("Do you want to play another round with Tiger? ")
+        if userinput4.lower() == "yes":
+            print("That was a mistake, during your second round you annoy Tiger too much. He got fed up with you and hit you with a golf cart!")
+            replay()
+        elif userinput4.lower() == "no":
+            print("As you walk out into the parking lot you see Tiger waiting there for you, he gives you his car.")
+            car()
+        else:
+            print("Please only answer yes or no ")
+            roundtiger()
+
+    def player():
+        userinput3 = input("Who do you want to play with? - Tiger Woods or Jack Nicklaus? ")
+        if userinput3.lower() == "tiger woods":
+            print("You have the round of your life and shoot a 72...Tiger shoots a 64")
+            roundtiger()
+        elif userinput3.lower() == "jack nicklaus":
+            print("You play well and shoot a 76...Jack shoots a 69")
+            roundjack()
+        else:
+            print("You can only choose Tiger Woods or Jack Nicklaus ")
+            player()
+
+    def course():
+        userinput2 = input("What course do you want to play? - Pebble Beach, Agusta National, or St. Andrews? ")
+        if userinput2.lower() == "agusta national":
+            player()
+        elif userinput2.lower() == "pebble beach":
+            player()
+        elif userinput2.lower() == "st. andrews":
+            player()
+        else:
+            print("You can only choose St. Andrews, Pebble Beach, or Agusta National")
+            course()
+
+    def other():
+        userinput8 = input("Do you want to play basketball or football? ")
+        if userinput8.lower() == "basketball":
+            print("you go to the gym which is next to the golf course. An errant golf ball crashes through the window and hits you in the head sending you to the hospital. Better play golf next time!")
+            replay()
+        elif userinput8.lower() == "football":
+            print("While catching a pass, an errant golf ball from the adjacent golf course hits the ball and pops it. You look over and see that Tiger Woods hit it. Better play golf next time!")
+            replay()
+        else:
+            print("only choose basketball or football")
+            other()
+
+    def repeat():
+        userinput1 = input("Do you want to play some golf? ")
+        if userinput1.lower() == "no":
+            print("bummer")
+            other()
+        elif userinput1.lower() == "yes":
+            course()
+        else:
+            print("Do you want to play some golf? Answer yes or no ")
+            repeat()
+    def replay():
+        userinput8 = input("Do you want to play the game again? ")
+        if userinput8.lower() == "yes":
+            entiregame()
+        elif userinput8.lower() == "no":
+            print("Bye, thanks for playing!")
+        else:
+            print("Only answer yes or no. Do you want to play the game again? ")
+            replay()
+
+    repeat()
+entiregame()
