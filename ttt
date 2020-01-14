@@ -1,0 +1,46 @@
+import turtle
+# defining the window
+window = turtle.Screen()
+window.bgcolor("dark blue")
+window.title("Tic Tac Toe")
+
+# defining the turtle i.e. determines the turtle shape/size/color
+t = turtle.Turtle()
+t.color("red")
+t.pensize(8)
+t.shape("turtle")
+t.shapesize(1)
+t.speed(10)
+
+# each following line moves the pen/turtle and creates the board for the game
+t.pu()
+t.goto(-300,-100)
+t.pd()
+t.forward(600)
+t.pu()
+t.goto(-300,100)
+t.pd()
+t.forward(600)
+t.pu()
+t.goto(-100,250)
+t.pd()
+t.right(90)
+t.fd(500)
+t.pu()
+t.goto(100,250)
+t.pd()
+t.fd(500)
+t.pu()
+
+# drawing an x
+t.write("x", font = ("arial",200))
+
+# on screen click to place an x or o
+def gotoandprint(x, y):
+    gotoresult = turtle.goto(x, y)
+    print(turtle.xcor(), turtle.ycor())
+    return gotoresult
+
+window.onscreenclick(gotoandprint)
+
+window.mainloop()
