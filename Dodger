@@ -1,0 +1,96 @@
+# setting up tkinter
+# importing time and threading allows for simultaneous movement of multiple images
+
+import time
+from tkinter import *
+import threading
+window = Tk()
+
+# setting up the canvas
+playground = Canvas(window, width = 696, height = 392)
+playground.pack()
+
+# creating the background image
+spaceImg = PhotoImage(file = "space.gif")
+spaceBG = playground.create_image(0, 0, anchor = NW, image = spaceImg)
+
+# putting the ship on top of the background
+shipPic = PhotoImage(file = "ship.png")
+shipPic_img = shipPic
+ship = playground.create_image(348,345, image = shipPic)
+
+# putting the enemy on top of the background
+enemyPic = PhotoImage(file = "enemy.png")
+enemyPic_img = enemyPic
+enemy = playground.create_image(348,15, image = enemyPic)
+
+# creating a boundary box for the ship
+# def moveEnemy():
+#     playground.move(enemy, 2, 0)
+#     if playground.bbox(enemy)[0] >= window.winfo_width():
+#         playground.delete(enemy)
+#     else:
+#         window.after(50, enemyBoundary())
+#
+
+# def enemyBoundary():
+#     enemyBbox = playground.bbox(enemy)
+#     enemyx1 = enemyBbox[0]
+#     enemyx1 = enemyBbox[1]
+#     enemyx2 = enemyBbox[2]
+#     enemyy2 = enemyBbox[3]
+
+
+
+def shipBoundary():
+    shipBbox = playground.bbox(ship)
+    shipx1 = shipBbox[0]
+    shipy1 = shipBbox[1]
+    shipx2 = shipBbox[2]
+    shipy2 = shipBbox[3]
+
+    # keeping the ship on the screen
+    if shipx2 > 705:
+        playground.move(ship, -20,0)
+    elif shipx1 < 0:
+        playground.move(ship, 20, 0)
+    elif shipy2 < 70:
+        playground.move(ship, 0, 20)
+    elif shipy1 > 310:
+        playground.move(ship, 0, -20)
+
+# allowing the ship to move
+# calling the "shipBoundary()" function gets the coordinates of the ship every time it moves
+def moveright(event):
+    for i in range(3):
+        playground.move(ship, 5, 0)
+        shipBoundary()
+def moveleft(event):
+    for i in range(3):
+        playground.move(ship, -5, 0)
+        shipBoundary()
+def moveup(event):
+    for i in range(3):
+        playground.move(ship, 0, -5)
+        shipBoundary()
+def movedown(event):
+    for i in range(3):
+        playground.move(ship, 0, 5)
+        shipBoundary()
+
+# binding the keys to the movement functions
+playground.bind_all("<Right>", moveright)
+playground.bind_all("<Left>", moveleft)
+playground.bind_all("<Up>", moveup)
+playground.bind_all("<Down>", movedown)
+
+# creating the two threads that will move the images
+
+# def threads(*args):
+#     thead1 = threading.Thread(target = move)
+
+
+
+
+# "window.mainloop()" allows the entire code to run
+window.mainloop()
