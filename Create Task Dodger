@@ -1,0 +1,273 @@
+# setting up tkinter
+# importing time and threading allows for simultaneous movement of multiple images
+
+from random import *
+from tkinter import *
+import threading
+
+window = Tk()
+
+# setting up the canvas
+playground = Canvas(window, width = 696, height = 392)
+playground.pack()
+
+# creating the background image
+spaceImg = PhotoImage(file = "space.gif")
+spaceBG = playground.create_image(0, 0, anchor = NW, image = spaceImg)
+
+# putting the ship on top of the background
+shipPic = PhotoImage(file = "ship.png")
+shipPic_img = shipPic
+ship = playground.create_image(348,345, image = shipPic)
+
+
+
+
+# putting the enemy on top of the background
+enemyPic = PhotoImage(file = "enemy.png")
+enemyPic_img = enemyPic
+enemy = playground.create_image(348,30, image = enemyPic)
+
+# copying the enemy image four more times and placing it in different locations
+
+enemyPic2 = PhotoImage(file = "enemy.png")
+enemyPic2_img = enemyPic2
+enemy2 = playground.create_image(228,30, image = enemyPic2)
+
+enemyPic3 = PhotoImage(file = "enemy.png")
+enemyPic3_img = enemyPic3
+enemy3 = playground.create_image(468,30, image = enemyPic3)
+
+enemyPic4 = PhotoImage(file = "enemy.png")
+enemyPic4_img = enemyPic4
+enemy4 = playground.create_image(588,30, image = enemyPic4)
+
+enemyPic5 = PhotoImage(file = "enemy.png")
+enemyPic5_img = enemyPic5
+enemy5 = playground.create_image(108,30, image = enemyPic5)
+
+
+
+
+
+# creating boundaries for the ship and enemies
+def shipBoundary():
+    try:
+        shipBbox = playground.bbox(ship)
+        shipx1 = shipBbox[0]
+        shipy1 = shipBbox[1]
+        shipx2 = shipBbox[2]
+        shipy2 = shipBbox[3]
+
+        enemyBbox = playground.bbox(enemy)
+        enemyx1 = enemyBbox[0]
+        enemyy1 = enemyBbox[1]
+        enemyx2 = enemyBbox[2]
+        enemyy2 = enemyBbox[3]
+
+        enemy2Bbox = playground.bbox(enemy2)
+        enemy2x1 = enemy2Bbox[0]
+        enemy2y1 = enemy2Bbox[1]
+        enemy2x2 = enemy2Bbox[2]
+        enemy2y2 = enemy2Bbox[3]
+
+        enemy3Bbox = playground.bbox(enemy3)
+        enemy3x1 = enemy3Bbox[0]
+        enemy3y1 = enemy3Bbox[1]
+        enemy3x2 = enemy3Bbox[2]
+        enemy3y2 = enemy3Bbox[3]
+
+        enemy4Bbox = playground.bbox(enemy4)
+        enemy4x1 = enemy4Bbox[0]
+        enemy4y1 = enemy4Bbox[1]
+        enemy4x2 = enemy4Bbox[2]
+        enemy4y2 = enemy4Bbox[3]
+
+        enemy5Bbox = playground.bbox(enemy5)
+        enemy5x1 = enemy5Bbox[0]
+        enemy5y1 = enemy5Bbox[1]
+        enemy5x2 = enemy5Bbox[2]
+        enemy5y2 = enemy5Bbox[3]
+
+        # making the ship move when there is a collision
+        if enemyy1 <= shipy1 <= enemyy2 and enemyx1 <= shipx1 <= enemyx2:
+                playground.move(ship, -20, 0)
+
+        if enemy2y1 <= shipy1 <= enemy2y2 and enemy2x1 <= shipx1 <= enemy2x2:
+                playground.move(ship, -20, 0)
+
+        if enemy3y1 <= shipy1 <= enemy3y2 and enemy3x1 <= shipx1 <= enemy3x2:
+                playground.move(ship, -20, 0)
+
+        if enemyy1 <= shipy1 <= enemy4y2 and enemy4x1 <= shipx1 <= enemy4x2:
+                playground.move(ship, -20, 0)
+
+        if enemy5y1 <= shipy1 <= enemy5y2 and enemy5x1 <= shipx1 <= enemy5x2:
+                playground.move(ship, -20, 0)
+
+        # keeping the ship on the screen
+        if shipx2 > 705:
+            playground.move(ship, -20,0)
+        elif shipx1 < 0:
+            playground.move(ship, 20, 0)
+        elif shipy2 < 70:
+            playground.move(ship, 0, 20)
+        elif shipy1 > 310:
+            playground.move(ship, 0, -20)
+    except:
+        if shipx2 > 705:
+            playground.move(ship, -20,0)
+        elif shipx1 < 0:
+            playground.move(ship, 20, 0)
+        elif shipy2 < 70:
+            playground.move(ship, 0, 20)
+        elif shipy1 > 310:
+            playground.move(ship, 0, -20)
+
+
+
+
+# allowing the ship to move
+# calling the "shipBoundary()" function gets the coordinates of the ship every time it moves
+def moveright(event):
+    for i in range(3):
+        playground.move(ship, 5, 0)
+        shipBoundary()
+def moveleft(event):
+    for i in range(3):
+        playground.move(ship, -5, 0)
+        shipBoundary()
+def moveup(event):
+    for i in range(3):
+        playground.move(ship, 0, -5)
+        shipBoundary()
+def movedown(event):
+    for i in range(3):
+        playground.move(ship, 0, 5)
+        shipBoundary()
+
+
+
+
+# binding the keys to the movement functions
+playground.bind_all("<Right>", moveright)
+playground.bind_all("<Left>", moveleft)
+playground.bind_all("<Up>", moveup)
+playground.bind_all("<Down>", movedown)
+
+
+
+
+# keeping the objects on the screen
+def moveShip():
+    playground.move(ship, 0, 5)
+    if playground.bbox(ship)[0] >= window.winfo_width():
+        playground.delete(ship)
+    else:
+        window.after(50, moveShip)
+
+def moveEnemy():
+    enemyloop()
+    playground.move(enemy, 0, 2)
+    if playground.bbox(enemy)[0] >= window.winfo_width():
+        playground.delete(enemy)
+    else:
+        window.after(50, moveEnemy)
+
+def moveEnemy2():
+    enemyloop()
+    playground.move(enemy2, 0, 2)
+    if playground.bbox(enemy2)[0] >= window.winfo_width():
+        playground.delete(enemy2)
+    else:
+        window.after(50, moveEnemy2)
+
+def moveEnemy3():
+    enemyloop()
+    playground.move(enemy3, 0, 2)
+    if playground.bbox(enemy3)[0] >= window.winfo_width():
+        playground.delete(enemy3)
+    else:
+        window.after(50, moveEnemy3)
+
+def moveEnemy4():
+    enemyloop()
+    playground.move(enemy4, 0, 2)
+    if playground.bbox(enemy4)[0] >= window.winfo_width():
+        playground.delete(enemy4)
+    else:
+        window.after(50, moveEnemy4)
+
+def moveEnemy5():
+    enemyloop()
+    playground.move(enemy5, 0, 2)
+    if playground.bbox(enemy5)[0] >= window.winfo_width():
+        playground.delete(enemy5)
+    else:
+        window.after(50, moveEnemy5)
+
+
+
+
+
+#threading: allows the ship to be moved by the user while other objects move simultaneously
+def thread(*args):
+    thread1 = threading.Thread(target= moveEnemy)
+    thread2 = threading.Thread(target= moveEnemy2)
+    thread3 = threading.Thread(target= moveEnemy3)
+    thread4 = threading.Thread(target= moveEnemy4)
+    thread5 = threading.Thread(target= moveEnemy5)
+    thread1.start()
+    thread2.start()
+    thread3.start()
+    thread4.start()
+    thread5.start()
+
+
+
+
+
+#binding threading function to space bar
+playground.bind_all("<space>", thread)
+
+
+
+
+# makes the enemies loop back to the top after exiting
+def enemyloop():
+    rx = randint(50, 646)
+    enemyb = playground.bbox(enemy)
+    if enemyb[3] > 392:
+        playground.coords(enemy, rx, 30)
+
+    rx = randint(50, 646)
+    enemy2b = playground.bbox(enemy2)
+    if enemy2b[3] > 392:
+        playground.coords(enemy2, rx, 30)
+
+    rx = randint(50, 646)
+    enemy3b = playground.bbox(enemy3)
+    if enemy3b[3] > 392:
+        playground.coords(enemy3, rx, 30)
+
+    rx = randint(50, 646)
+    enemy4b = playground.bbox(enemy4)
+    if enemy4b[3] > 392:
+        playground.coords(enemy4, rx, 30)
+
+    rx = randint(50, 646)
+    enemy5b = playground.bbox(enemy5)
+    if enemy5b[3] > 392:
+        playground.coords(enemy5, rx, 30)
+
+
+
+
+# creating a label at the bottom of the screen
+infoLabel = Label(window, text= "Click Spacebar to start...Avoid the enemies!", bg = "purple", fg = "white")
+infoLabel.pack()
+
+
+
+# "window.mainloop()" allows the entire code to run
+window.mainloop()
