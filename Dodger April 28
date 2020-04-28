@@ -1,18 +1,17 @@
 # setting up tkinter
 # importing time and threading allows for simultaneous movement of multiple images
-
 from random import *
 from tkinter import *
 import threading
+import tkinter as tk
+
 # initializing the score variable
 global score
 score = 0
-
 window = Tk()
 
 # puts the entire game into a function so it can be called in order to restart
 def wholegame():
-
     # setting up the canvas
     playground = Canvas(window, width = 696, height = 392)
     playground.pack()
@@ -47,9 +46,6 @@ def wholegame():
     enemyPic5 = PhotoImage(file = "enemy.png")
     enemyPic5_img = enemyPic5
     enemy5 = playground.create_image(108,30, image = enemyPic5)
-
-
-
 
 
     # creating boundaries for the ship and enemies
@@ -125,7 +121,6 @@ def wholegame():
                 playground.move(ship, 0, 20)
             elif shipy1 > 310:
                 playground.move(ship, 0, -20)
-
 
 
 
@@ -262,6 +257,42 @@ def wholegame():
             score += 1
             scorelabel.config(text = "Score:" + str(score))
 
+    # stops the game when a collision occurs
+    def lose():
+        infoLabel2 = Label(window, text= "You've been hit! Do you want to play again?", bg = "purple", fg = "white")
+        infoLabel2.place(x = 210, y = 196)
+        playground.delete(enemy)
+        playground.delete(enemy2)
+        playground.delete(enemy3)
+        playground.delete(enemy4)
+        playground.delete(enemy5)
+        playground.delete(ship)
+    #     newwindow()
+    #
+    #
+    # # creates a new window to ask the player if they want to play again
+    # def newwindow ():
+    #
+    #     window2 = Tk()
+    #
+    #     questionLabel = Label(window2, text= "You've been hit! Do you want to play again?", bg = "purple", fg = "white")
+    #     questionLabel.pack()
+    #
+    #     playground = Canvas(window2, width = 200, height = 200)
+    #     playground.pack()
+    #
+    #     button1 = tk.Button(text = "Yes")
+    #     playground.create_window(60, 100, window = button1)
+    #
+    #     button2 = tk.Button(text = "No")
+    #     playground.create_window(140, 100, window = button2)
+    #
+    #     window2.mainloop()
+
+
+
+
+
     # creating a label at the bottom of the screen
     infoLabel = Label(window, text= "Click Spacebar to start...Avoid the enemies!", bg = "purple", fg = "white")
     infoLabel.pack()
@@ -270,12 +301,8 @@ def wholegame():
     scorelabel = Label(window, text = "Score: " + str(score), bg = "purple", fg = "white")
     scorelabel.place(x = 10, y = 10)
 
-
-    def lose():
-        infoLabel2 = Label(window, text= "You've been hit! Do you want to play again?", bg = "purple", fg = "white")
-        infoLabel2.place(x = 100, y = 100)
-
-    # "window.mainloop()" allows the entire code to run
+    # allows the code to run
     window.mainloop()
 
+# calls the wholegame function to run the entire code
 wholegame()
