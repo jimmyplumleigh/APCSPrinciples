@@ -3,14 +3,16 @@
 from random import *
 from tkinter import *
 import threading
-import tkinter as tk
-import time
 
 window = Tk()
 
 # initializing the score variable
 global score
 score = 0
+
+# initializing the collision score variable
+global cscore
+cscore = 0
 
 # setting up the canvas
 playground = Canvas(window, width = 696, height = 392)
@@ -46,6 +48,35 @@ enemy4 = playground.create_image(588,30, image = enemyPic4)
 enemyPic5 = PhotoImage(file = "enemy.png")
 enemyPic5_img = enemyPic5
 enemy5 = playground.create_image(108,30, image = enemyPic5)
+
+
+# creating a label at the bottom of the screen
+infoLabel = Label(window, text= "Click Spacebar to start...Avoid the enemies!", bg = "purple", fg = "white")
+infoLabel.pack()
+
+
+# creating the score label
+scorelabel = Label(window, text = "Score: " + str(score), bg = "purple", fg = "white")
+scorelabel.place(x = 10, y = 10)
+
+
+# creating the collision label
+cscorelabel = Label(window, text = "Collisions: " + str(cscore), bg = "purple", fg = "white")
+cscorelabel.place(x = 606, y = 10)
+
+
+# adds one to the collision label after every collision
+def hit():
+    global cscore
+    cscore += 1
+    cscorelabel.config(text = "Collisions:" + str(cscore))
+
+# moves the ship to a random position after every collision
+def collision():
+    rx = randint(50, 646)
+    ry = randint(50, 382)
+    playground.coords(ship, rx, ry)
+    hit()
 
 
 # creating boundaries for the ship and enemies
@@ -88,15 +119,15 @@ def shipBoundary():
 
     # recognizes when a collision occurs between the ship and any of the enemies
     if shipx1 <= ((enemyx1 + enemyx2)/2) <= shipx2 and shipy1 <= ((enemyy1 + enemyy2)/2) <= shipy2:
-        lose()
+        collision()
     if shipx1 <= ((enemy2x1 + enemy2x2)/2) <= shipx2 and shipy1 <= ((enemy2y1 + enemy2y2)/2) <= shipy2:
-        lose()
+        collision()
     if shipx1 <= ((enemy3x1 + enemy3x2)/2) <= shipx2 and shipy1 <= ((enemy3y1 + enemy3y2)/2) <= shipy2:
-        lose()
+        collision()
     if shipx1 <= ((enemy4x1 + enemy4x2)/2) <= shipx2 and shipy1 <= ((enemy4y1 + enemy4y2)/2) <= shipy2:
-        lose()
+        collision()
     if shipx1 <= ((enemy5x1 + enemy5x2)/2) <= shipx2 and shipy1 <= ((enemy5y1 + enemy5y2)/2) <= shipy2:
-        lose()
+        collision()
 
     # keeping the ship on the screen
     if shipx2 > 705:
@@ -128,20 +159,56 @@ def movedown(event):
         playground.move(ship, 0, 5)
         shipBoundary()
 
+
 # binding the keys to the movement functions
 playground.bind_all("<Right>", moveright)
 playground.bind_all("<Left>", moveleft)
 playground.bind_all("<Up>", moveup)
 playground.bind_all("<Down>", movedown)
 
-# keeping the objects on the screen
-def moveShip():
-    playground.move(ship, 0, 7)
-    if playground.bbox(ship)[0] >= window.winfo_width():
-        playground.delete(ship)
-    else:
-        window.after(50, moveShip)
 
+# makes the enemies loop back to the top after exiting
+def enemyloop():
+    global score
+    # allows the enemy to respawn anywhere between the following X-values
+    rx = randint(50, 646)
+    enemyb = playground.bbox(enemy)
+    if enemyb[3] > 392:
+        playground.coords(enemy, rx, 30)
+        # adds one to the score every time the enemy loops to the top
+        score += 1
+        scorelabel.config(text = "Score:" + str(score))
+
+    rx = randint(50, 646)
+    enemy2b = playground.bbox(enemy2)
+    if enemy2b[3] > 392:
+        playground.coords(enemy2, rx, 30)
+        score += 1
+        scorelabel.config(text = "Score:" + str(score))
+
+    rx = randint(50, 646)
+    enemy3b = playground.bbox(enemy3)
+    if enemy3b[3] > 392:
+        playground.coords(enemy3, rx, 30)
+        score += 1
+        scorelabel.config(text = "Score:" + str(score))
+
+    rx = randint(50, 646)
+    enemy4b = playground.bbox(enemy4)
+    if enemy4b[3] > 392:
+        playground.coords(enemy4, rx, 30)
+        score += 1
+        scorelabel.config(text = "Score:" + str(score))
+
+    rx = randint(50, 646)
+    enemy5b = playground.bbox(enemy5)
+    if enemy5b[3] > 392:
+        playground.coords(enemy5, rx, 30)
+        score += 1
+        scorelabel.config(text = "Score:" + str(score))
+
+
+# move enemy functions are called in threading which allows them to move by themselves
 def moveEnemy():
     enemyloop()
     shipBoundary()
@@ -150,7 +217,6 @@ def moveEnemy():
         playground.delete(enemy)
     else:
         window.after(50, moveEnemy)
-
 
 def moveEnemy2():
     enemyloop()
@@ -202,69 +268,9 @@ def thread(*args):
     thread4.start()
     thread5.start()
 
+
 #binding threading function to space bar
 playground.bind_all("<space>", thread)
-
-
-# makes the enemies loop back to the top after exiting
-def enemyloop():
-    global score
-    # allows the enemy to respawn anywhere between the following X-values
-    rx = randint(50, 646)
-    enemyb = playground.bbox(enemy)
-    if enemyb[3] > 392:
-        playground.coords(enemy, rx, 30)
-        # adds one to the score every time the enemy loops to the top
-        score += 1
-        scorelabel.config(text = "Score:" + str(score))
-
-    rx = randint(50, 646)
-    enemy2b = playground.bbox(enemy2)
-    if enemy2b[3] > 392:
-        playground.coords(enemy2, rx, 30)
-        score += 1
-        scorelabel.config(text = "Score:" + str(score))
-
-    rx = randint(50, 646)
-    enemy3b = playground.bbox(enemy3)
-    if enemy3b[3] > 392:
-        playground.coords(enemy3, rx, 30)
-        score += 1
-        scorelabel.config(text = "Score:" + str(score))
-
-    rx = randint(50, 646)
-    enemy4b = playground.bbox(enemy4)
-    if enemy4b[3] > 392:
-        playground.coords(enemy4, rx, 30)
-        score += 1
-        scorelabel.config(text = "Score:" + str(score))
-
-    rx = randint(50, 646)
-    enemy5b = playground.bbox(enemy5)
-    if enemy5b[3] > 392:
-        playground.coords(enemy5, rx, 30)
-        score += 1
-        scorelabel.config(text = "Score:" + str(score))
-
-# stops the game when a collision occurs
-def lose():
-    infoLabel2 = Label(window, text= "You've been hit! Game Over!", bg = "purple", fg = "white")
-    infoLabel2.place(x = 210, y = 196)
-    playground.delete(enemy)
-    playground.delete(enemy2)
-    playground.delete(enemy3)
-    playground.delete(enemy4)
-    playground.delete(enemy5)
-    playground.delete(ship)
-
-
-# creating a label at the bottom of the screen
-infoLabel = Label(window, text= "Click Spacebar to start...Avoid the enemies!", bg = "purple", fg = "white")
-infoLabel.pack()
-
-# creating the score label
-scorelabel = Label(window, text = "Score: " + str(score), bg = "purple", fg = "white")
-scorelabel.place(x = 10, y = 10)
 
 
 # allows the code to run
