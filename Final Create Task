@@ -19,15 +19,18 @@ playground = Canvas(window, width = 696, height = 392)
 playground.pack()
 
 # creating the background image
+# space.gif image credit to: https://www.techsmith.com/download-snagit-mac-thankyou.html
 spaceImg = PhotoImage(file = "space.gif")
 spaceBG = playground.create_image(0, 0, anchor = NW, image = spaceImg)
 
 # putting the ship on top of the background
+# ship.png image credit to: https://webstockreview.net/image/spaceship-clipart-pixel/3165016.html
 shipPic = PhotoImage(file = "ship.png")
 shipPic_img = shipPic
 ship = playground.create_image(348,345, image = shipPic)
 
 # putting the enemy on top of the background
+# enemy.png image credit to: https://inventwithpython.com/blog/2012/02/20/i-need-practice-programming-49-ideas-for-game-clones-to-code/
 enemyPic = PhotoImage(file = "enemy.png")
 enemyPic_img = enemyPic
 enemy = playground.create_image(348,30, image = enemyPic)
@@ -65,11 +68,15 @@ cscorelabel = Label(window, text = "Collisions: " + str(cscore), bg = "purple", 
 cscorelabel.place(x = 606, y = 10)
 
 
-# adds one to the collision label after every collision
+# adds 1 to the collision label and subtracts 1 from the score label after every collision
 def hit():
     global cscore
+    global score
     cscore += 1
     cscorelabel.config(text = "Collisions:" + str(cscore))
+    score -= 1
+    scorelabel.config(text = "Score:" + str(score))
+
 
 # moves the ship to a random position after every collision
 def collision():
