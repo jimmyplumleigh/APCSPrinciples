@@ -186,28 +186,24 @@ def enemyloop():
         score += 1
         scorelabel.config(text = "Score:" + str(score))
 
-    rx = randint(50, 646)
     enemy2b = playground.bbox(enemy2)
     if enemy2b[3] > 392:
         playground.coords(enemy2, rx, 30)
         score += 1
         scorelabel.config(text = "Score:" + str(score))
 
-    rx = randint(50, 646)
     enemy3b = playground.bbox(enemy3)
     if enemy3b[3] > 392:
         playground.coords(enemy3, rx, 30)
         score += 1
         scorelabel.config(text = "Score:" + str(score))
 
-    rx = randint(50, 646)
     enemy4b = playground.bbox(enemy4)
     if enemy4b[3] > 392:
         playground.coords(enemy4, rx, 30)
         score += 1
         scorelabel.config(text = "Score:" + str(score))
 
-    rx = randint(50, 646)
     enemy5b = playground.bbox(enemy5)
     if enemy5b[3] > 392:
         playground.coords(enemy5, rx, 30)
